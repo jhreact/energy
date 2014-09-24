@@ -20,15 +20,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 SECRET_KEY = 'fbx&2+x#ji_y7ba8^lb%qz+j)ayh15j!2+uz)dl)dabm%^o6fr'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-TEMPLATE_DEBUG = True
+TEMPLATE_DEBUG = False
 
 ALLOWED_HOSTS = []
-
-ADMINS = (
-    ('Admin', 'jhreact@users.noreply.github.com'),
-)
 
 # Application definition
 

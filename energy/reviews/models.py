@@ -24,6 +24,9 @@ class Supplier(TimeStampedModel):
             self.slug = slugify(self.name)
         super(Supplier, self).save(*args, **kwargs)
 
+    def __str__(self):
+        return self.name
+
 
 class Review(TimeStampedModel):
     """ Model representing a Review """
@@ -35,3 +38,6 @@ class Review(TimeStampedModel):
     author = models.CharField(max_length=100)
     status = models.CharField(max_length=100, choices=STATUS_CHOICES, default='draft')
     content = models.TextField()
+
+    def __str__(self):
+        return "{.supplier.name}: {.created}".format(self)

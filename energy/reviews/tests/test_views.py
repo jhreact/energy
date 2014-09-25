@@ -66,4 +66,16 @@ class SupplierReviewListViewTestCase(TestCase):
         self.assertContains(response, "There are currently no reviews for this supplier")
         self.assertQuerysetEqual(response.context['object_list'], [])
 
+    def test_supplier_with_only_draft_reviews(self):
+        """ Should only show published reviews """
+        s1 = create_supplier("Supplier A")
+        r1 = create_review(s1, "author 1", 1, "review 1 for supplier A")
+        r2 = create_review(s1, "author 2", 2, "review 2 for supplier A")
+        r2.status="published"
+        r2.save()
+        response = self.client.get(reverse('reviews:supplier_reviews', kwargs={'slug': s1.slug}))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "review 2 for supplier A")
+        self.assertQuerysetEqual(response.context['object_list'], ["<Review: {}>".format(str(r2))])
+
 

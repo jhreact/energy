@@ -27,6 +27,11 @@ class Supplier(TimeStampedModel):
     def __str__(self):
         return self.name
 
+class PublishedReviewManager(models.Manager):
+    use_for_related_fields = True
+
+    def published(self, *args, **kwargs):
+        return self.filter(status='published', *args, **kwargs)
 
 class Review(TimeStampedModel):
     """ Model representing a Review """

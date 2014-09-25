@@ -6,7 +6,7 @@
 <h3>Suppliers</h3>
     <ul>
         {% for supplier in object_list %}
-            <li>{{ supplier.name }}</li>
+        <li><a href="{% url 'reviews:supplier_reviews' supplier.slug %}">{{ supplier.name }}</a></li>
         {% endfor %}
     </ul>
 {% endblock %}

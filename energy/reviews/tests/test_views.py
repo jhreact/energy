@@ -56,6 +56,13 @@ class SupplierReviewListViewTestCase(TestCase):
         self.assertContains(response, "There are currently no reviews for this supplier")
         self.assertQuerysetEqual(response.context['object_list'], [])
 
+    def test_supplier_review_list_view_has_create_link(self):
+        """ Show message when no reviews are available for this supplier"""
+        s1 = create_supplier("Supplier A")
+        response = self.client.get(reverse('reviews:supplier_reviews', kwargs={'slug': s1.slug}))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, '<a href="/reviews/{}/write">Write a review for {}</a>'.format(s1.slug, s1.name))
+
     def test_supplier_with_only_draft_reviews(self):
         """ Shouldn't show reviews if they are unpublished """
         s1 = create_supplier("Supplier A")

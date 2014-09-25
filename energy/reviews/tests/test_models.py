@@ -53,3 +53,21 @@ class ReviewModelTestCase(TestCase):
         """ Review status defaults to draft """
         self.assertEqual(self.tr1s4.status, 'draft')
 
+class PublishedReviewManager(TestCase):
+    def setUp(self):
+        self.ts1 = Supplier.objects.get_or_create(name="Test Supplier 1")[0]
+        self.tr1s1 = Review.objects.get_or_create(supplier=self.ts1, rating=1, author="Author 1", content="review1 for supplier1")[0]
+        self.tr2s1 = Review.objects.get_or_create(supplier=self.ts1, rating=2, author="Author 2", content="review2 for supplier1")[0]
+
+    def test_published_manager_returns_none_when_all_reviews_set_to_draft(self):
+        """ Reviews custom manager method """
+        self.assertNotEqual(Review.objects.count(), 0)
+        self.assertEqual(Review.objects.published().count(), 0)
+
+    def test_published_manager_returns_none_when_all_reviews_set_to_draft(self):
+        """ Reviews custom manager updates when review set to published """
+        published_count = Review.objects.published().count()
+        self.tr1s1.status='published'
+        self.tr1s1.save()
+        new_published_count = Review.objects.published().count()
+        self.assertTrue(new_published_count == published_count + 1)

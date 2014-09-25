@@ -15,8 +15,8 @@ class TimeStampedModel(models.Model):
 
 class Supplier(TimeStampedModel):
     """ Model representing a Supplier """
-    name = models.CharField(max_length=100)
-    slug = models.SlugField(editable=False)
+    name = models.CharField(max_length=100, unique=True)
+    slug = models.SlugField(unique=True)
 
     def save(self, *args, **kwargs):
         # Only gen slug when creating object, so it doesn't change

@@ -66,16 +66,20 @@ class SupplierReviewListViewTestCase(TestCase):
         self.assertContains(response, "There are currently no reviews for this supplier")
         self.assertQuerysetEqual(response.context['object_list'], [])
 
-    def test_supplier_with_only_draft_reviews(self):
-        """ Should only show published reviews """
+    def test_reviews_are_most_recent_first(self):
+        """ Most recent reviews should be first """
         s1 = create_supplier("Supplier A")
         r1 = create_review(s1, "author 1", 1, "review 1 for supplier A")
         r2 = create_review(s1, "author 2", 2, "review 2 for supplier A")
-        r2.status="published"
-        r2.save()
+        r3 = create_review(s1, "author 3", 3, "review 3 for supplier A")
+        r1.status="published"
+        r1.save()
+        r3.status="published"
+        r3.save()
         response = self.client.get(reverse('reviews:supplier_reviews', kwargs={'slug': s1.slug}))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "review 2 for supplier A")
-        self.assertQuerysetEqual(response.context['object_list'], ["<Review: {}>".format(str(r2))])
+        self.assertContains(response, "review 1 for supplier A")
+        self.assertContains(response, "review 3 for supplier A")
+        self.assertQuerysetEqual(response.context['object_list'], ["<Review: {}>".format(str(r3)), "<Review: {}>".format(str(r1))])
 
 

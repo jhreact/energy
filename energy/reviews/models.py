@@ -44,5 +44,7 @@ class Review(TimeStampedModel):
     status = models.CharField(max_length=100, choices=STATUS_CHOICES, default='draft')
     content = models.TextField()
 
+    objects = PublishedReviewManager()
+
     def __str__(self):
         return "{.supplier.name}: {.created}".format(self)

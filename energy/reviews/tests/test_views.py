@@ -5,8 +5,15 @@ from reviews.models import Supplier, Review
 from reviews.views import SupplierListView, SupplierReviewListView, create_review
 
 def create_supplier(name):
-    """ Creates a new Supplier, with the given name """
+    """ Returns a new Supplier, with the given name """
     return Supplier.objects.get_or_create(name=name)[0]
+
+def create_review(supplier, author, rating, content):
+    """
+    Returns a new Review, with the given supplier, author, rating, and content
+    """
+    return Review.objects.get_or_create(supplier=supplier, author=author,
+            rating=rating, content=content)[0]
 
 class SupplierListViewTestCase(TestCase):
     def test_empty_supplier_list_view(self):
@@ -39,3 +46,12 @@ class SupplierListViewTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertQuerysetEqual(response.context['object_list'], ['<Supplier: Supplier A>', '<Supplier: Supplier B>'])
 
+
+class SupplierReviewListViewTestCase(TestCase):
+    def test_empty_supplier_review_list_view(self):
+        """ Show message when no reviews are available for this supplier"""
+        s1 = create_supplier("Supplier A")
+        response = self.client.get(reverse('reviews:supplier_reviews', kwargs={'slug': s1.slug}))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "There are currently no reviews for this supplier")
+        self.assertQuerysetEqual(response.context['object_list'], [])

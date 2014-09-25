@@ -16,3 +16,11 @@ class SupplierListViewTestCase(TestCase):
         self.assertContains(response, "No suppliers are available")
         self.assertQuerysetEqual(response.context['object_list'], [])
 
+    def test_one_supplier_list_view(self):
+        """ Supplier should display on the Suppliers page"""
+        create_supplier("Supplier B")
+        response = self.client.get(reverse('reviews:suppliers'))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "<title>Suppliers</title>")
+        self.assertQuerysetEqual(response.context['object_list'], ['<Supplier: Supplier B>'])
+

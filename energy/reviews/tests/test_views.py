@@ -24,6 +24,13 @@ class SupplierListViewTestCase(TestCase):
         self.assertContains(response, "<title>Suppliers</title>")
         self.assertQuerysetEqual(response.context['object_list'], ['<Supplier: Supplier B>'])
 
+    def test_supplier_has_link_to_supplier_reviews(self):
+        """ Supplier should link to reviews page"""
+        create_supplier("Supplier A")
+        response = self.client.get(reverse('reviews:suppliers'))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, '<a href="/reviews/supplier-a/">Supplier A</a>')
+
     def test_suppliers_are_alphabetical_list_view(self):
         """ Supplier should display on the Suppliers page"""
         create_supplier("Supplier B")

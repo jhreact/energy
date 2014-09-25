@@ -4,9 +4,17 @@
 
 {% block content %}
 <h3>Suppliers</h3>
-    <ul>
-        {% for supplier in object_list %}
-        <li><a href="{% url 'reviews:supplier_reviews' supplier.slug %}">{{ supplier.name }}</a></li>
-        {% endfor %}
-    </ul>
+<div class="container-fluid">
+    <div class="row">
+    {% if object_list %}
+        <ul>
+            {% for supplier in object_list %}
+            <li><a href="{% url 'reviews:supplier_reviews' supplier.slug %}">{{ supplier.name }}</a></li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No suppliers are available</p>
+    {% endif %}
+    </div>
+</div>
 {% endblock %}

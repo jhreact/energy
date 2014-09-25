@@ -5,15 +5,22 @@
 {% block content %}
 <h3>{{ supplier.name }}</h3>
 <div class="container-fluid">
+{% if object_list %}
     {% for review in object_list %}
     <div class="row">
         Author: {{ review.author }}<br />
         Rating: {{ review.rating }}<br />
         Content: {{ review.content }}
+        <p></p>
     </div>
-    <p></p>
     {% endfor %}
-    <p></p>
-    <a href="{% url 'reviews:create_review' slug=supplier.slug %}">Write a review for {{ supplier.name }}</a>
+{% else %}
+    <div class="row">
+        <p>There are currently no reviews for this supplier</p>
+    </div>
+{% endif %}
+    <div class="row">
+        <a href="{% url 'reviews:create_review' slug=supplier.slug %}">Write a review for {{ supplier.name }}</a>
+    </div>
 </div>
 {% endblock %}

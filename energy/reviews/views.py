@@ -1,8 +1,10 @@
 from django.views.generic import ListView, CreateView
-from django.core.urlresolvers import reverse_lazy
-from django.shortcuts import get_object_or_404
+from django.core.urlresolvers import reverse, reverse_lazy
+from django.http import HttpResponseRedirect
+from django.shortcuts import render, get_object_or_404
 
 from .models import Supplier, Review
+from .forms import ReviewForm
 
 class SupplierListView(ListView):
     model = Supplier
@@ -23,6 +25,16 @@ class SupplierReviewListView(ListView):
         context['supplier'] = get_object_or_404(Supplier, slug=self.kwargs.get('slug'))
         return context
 
-class SupplierReviewCreateView(CreateView):
-    model = Review
-    # slug = self.kwargs.get('slug', None)
+def create_review(request, slug):
+    supplier = get_object_or_404(Supplier, slug=slug)
+    if request.method == 'POST':
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            new_review = form.save(commit=False)
+            new_review.supplier = supplier
+            new_review.save()
+            return HttpResponseRedirect(reverse('reviews:suppliers'))
+    else:
+        form = ReviewForm()
+    return render(request, 'reviews/review_form.html', {'supplier': supplier, 'form': form})
+

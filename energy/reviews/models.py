@@ -47,4 +47,4 @@ class Review(TimeStampedModel):
     objects = PublishedReviewManager()
 
     def __str__(self):
-        return "{.supplier.name}: {.created}".format(self)
+        return "{}: {}".format(self.supplier.name, self.created.strftime('%Y-%m-%d %X'))

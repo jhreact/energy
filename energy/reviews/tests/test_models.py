@@ -43,3 +43,6 @@ class ReviewModelTestCase(TestCase):
     def test_tr1s4_created_less_than_tr2s4_created(self):
         self.assertLess(self.tr1s4.created, self.tr2s4.created)
 
+    def test_default_is_draft(self):
+        self.assertEqual(self.tr1s4.status, 'draft')
+

@@ -24,3 +24,12 @@ class CreateReviewFormTestCase(TestCase):
         self.assertEqual(test_review.content, 'This is an awesome supplier!')
         self.assertEqual(test_review.status, 'draft')
         self.assertIs(test_review.supplier, self.ts1)
+
+    def test_blank_form(self):
+        form = ReviewForm({})
+        self.assertFalse(form.is_valid())
+        self.assertEqual(form.errors, {
+            'author': ['This field is required.'],
+            'rating': ['This field is required.'],
+            'content': ['This field is required.'],
+        })

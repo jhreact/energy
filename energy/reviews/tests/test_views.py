@@ -21,6 +21,7 @@ class BadUrlsViewTest(TestCase):
         response = self.client.get('/')
         self.assertEqual(response.status_code, 404)
 
+
 class SupplierListViewTestCase(TestCase):
     def test_empty_supplier_list_view(self):
         """ Show message when no suppliers are available """
@@ -54,6 +55,11 @@ class SupplierListViewTestCase(TestCase):
 
 
 class SupplierReviewListViewTestCase(TestCase):
+    def test_unknown_slug(self):
+        """ Should 404 if the slug is unknown"""
+        response = self.client.get(reverse('reviews:supplier_reviews', kwargs={'slug': 'fake-slug'}))
+        self.assertEqual(response.status_code, 404)
+
     def test_empty_supplier_review_list_view(self):
         """ Show message when no reviews are available for this supplier"""
         s1 = create_supplier("Supplier A")

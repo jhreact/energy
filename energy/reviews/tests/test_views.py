@@ -109,9 +109,15 @@ class SupplierReviewListViewTestCase(TestCase):
         self.assertQuerysetEqual(response.context['object_list'], ["<Review: {}>".format(str(r3)), "<Review: {}>".format(str(r1))])
 
 class CreateReviewTestCase(TestCase):
+    def setUp(self):
+        self.ts1 = Supplier.objects.get_or_create(name="Test Supplier 1")[0]
+
     def test_create_review_unknown_slug(self):
         """ Create review should 404 if the slug is unknown"""
         response = self.client.get(reverse('reviews:create_review', kwargs={'slug': 'fake-slug'}))
         self.assertEqual(response.status_code, 404)
 
+    def test_create_review_known_slug(self):
+        """ Display the create review page if the slug is known """
+        response = self.client.get(reverse('reviews:create_review', kwargs={'slug': self.ts1.slug}))
 

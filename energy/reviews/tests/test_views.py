@@ -15,6 +15,12 @@ def create_review(supplier, author, rating, content):
     return Review.objects.get_or_create(supplier=supplier, author=author,
             rating=rating, content=content)[0]
 
+class BadUrlsViewTest(TestCase):
+    def test_slash(self):
+        """ Requests to / should 404 """
+        response = self.client.get('/')
+        self.assertEqual(response.status_code, 404)
+
 class SupplierListViewTestCase(TestCase):
     def test_empty_supplier_list_view(self):
         """ Show message when no suppliers are available """

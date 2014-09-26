@@ -2,7 +2,6 @@ from django.core.urlresolvers import reverse
 from django.test import TestCase
 
 from reviews.models import Supplier, Review
-from reviews.views import SupplierListView, SupplierReviewListView, create_review
 
 def create_supplier(name):
     """ Returns a new Supplier, with the given name """
@@ -120,4 +119,11 @@ class CreateReviewTestCase(TestCase):
     def test_create_review_known_slug(self):
         """ Display the create review page if the slug is known """
         response = self.client.get(reverse('reviews:create_review', kwargs={'slug': self.ts1.slug}))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "<title>Review {}</title>".format(self.ts1.name))
+
+    def test_submit_data(self):
+        response = self.client.post(reverse('reviews:create_review', kwargs={'slug': self.ts1.slug}), {'author': 'author', 'rating': 3, 'content': 'test supplier 1 create review post'})
+        self.assertRedirects(response, reverse('reviews:suppliers'))
+
 

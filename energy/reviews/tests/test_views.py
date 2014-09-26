@@ -55,7 +55,7 @@ class SupplierListViewTestCase(TestCase):
 
 
 class SupplierReviewListViewTestCase(TestCase):
-    def test_unknown_slug(self):
+    def test_supplier_review_unknown_slug(self):
         """ Should 404 if the slug is unknown"""
         response = self.client.get(reverse('reviews:supplier_reviews', kwargs={'slug': 'fake-slug'}))
         self.assertEqual(response.status_code, 404)
@@ -107,5 +107,11 @@ class SupplierReviewListViewTestCase(TestCase):
         self.assertContains(response, "review 1 for supplier A")
         self.assertContains(response, "review 3 for supplier A")
         self.assertQuerysetEqual(response.context['object_list'], ["<Review: {}>".format(str(r3)), "<Review: {}>".format(str(r1))])
+
+class CreateReviewTestCase(TestCase):
+    def test_create_review_unknown_slug(self):
+        """ Create review should 404 if the slug is unknown"""
+        response = self.client.get(reverse('reviews:create_review', kwargs={'slug': 'fake-slug'}))
+        self.assertEqual(response.status_code, 404)
 
 
